@@ -54,6 +54,7 @@ sub ping_and_store {
   }
 }
 
+our $ping_periodically_exit=0;
 sub ping_periodically {
   my $dbh=shift;
   my $host=shift;
@@ -64,6 +65,7 @@ sub ping_periodically {
     my $time=time;
     ping_and_store($dbh,$host);
     return if $max_period && time>$end_time;
+    return if $ping_periodically_exit;
     if (time<$time+$period) {
       sleep($time+$period-time);
     }

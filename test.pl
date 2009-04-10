@@ -14,9 +14,9 @@ Ping2DB::ping_and_store($dbh,'localhost');
  alarm(20);
  my $time=time;
  eval {
-   ping_periodically($dbh,'localhost',3,25);
+   ping_periodically($dbh,'localhost',3,15);
  };
  is($@,'');
- cmp_ok(time-$time,'>',15);
+ cmp_ok(time-$time,'>',14);
  alarm(0);
 }
