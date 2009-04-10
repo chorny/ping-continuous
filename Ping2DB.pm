@@ -5,6 +5,7 @@ use warnings;
 use DBI;
 use Time::Piece;
 use Exporter 'import';
+our @EXPORT=@EXPORT_OK=qw/create_sqlite_db/;
 
 sub create_sqlite_db {
   my $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
