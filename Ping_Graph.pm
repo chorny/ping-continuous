@@ -22,22 +22,21 @@ sub max_dt {
 sub max_dt_tp {
   my $dbh=shift;
   my $max_dt=max_dt($dbh);
-  my $max_time=Time::Piece->parse($max_dt);
+  my $max_time=Time::Piece->strptime($max_dt,"%Y-%m-%d %H:%M");
+  return $max_time;
 }
 
 sub graph_for_latest {
   my $dbh=shift;
-  my $max_dt=max_dt($dbh);
-  my $max_time=Time::Piece->parse($max_dt);
+  my $max_dt=max_dt_tp($dbh);
+  $max_dt-=3600*5;
 
-  my $sql="SELECT dt AS m FROM pings_by_period WHERE $max_dt";
+  my $sql="SELECT * FROM pings_by_period WHERE dt>$max_dt";
   my $sth=$dbh->prepare($sql);
 
   $sth->execute() || err($dbh->errstr());
-  if (my $ref = $sth->fetchrow_hashref()) {
+  while (my $ref = $sth->fetchrow_hashref()) {
     return $max_dt;
-  } else {
-    die;
   }
 }
 
