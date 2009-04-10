@@ -5,8 +5,10 @@ use warnings;
 use DBI;
 use Time::Piece;
 use Net::Ping;
+use Time::Hires;
 use Exporter 'import';
-our @EXPORT=our @EXPORT_OK=qw/create_sqlite_db current_date_hour current_date_hour_10min/;
+our @EXPORT=our @EXPORT_OK=qw/create_sqlite_db current_date_hour current_date_hour_10min
+ping_periodically/;
 
 sub create_sqlite_db {
   my $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
@@ -49,6 +51,22 @@ sub ping_and_store {
   if ($n==0) {
     $sql="INSERT INTO pings_by_period (dt,$field) VALUES (?,1)";
     $dbh->do($sql,{},$dt) || die('DB error '. $dbh->errstr()."\nsql: $sql");;
+  }
+}
+
+sub ping_periodically {
+  my $dbh=shift;
+  my $host=shift;
+  my $period=shift;
+  my $max_period= shift || 0;
+  my $end_time=time+$max_period;
+  while (1) {
+    my $time=time;
+    ping_and_store($dbh,$host);
+    return if $max_period && time>$end_time;
+    if (time<$time+$period) {
+      sleep($time+$period-time);
+    }
   }
 }
 

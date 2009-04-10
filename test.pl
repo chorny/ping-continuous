@@ -10,4 +10,13 @@ ok($dbh);
 like(current_date_hour,qr/^\d{4}-\d{2}-\d{2} \d{2}$/s);
 like(current_date_hour_10min,qr/^\d{4}-\d{2}-\d{2} \d{2}:\d0$/s);
 Ping2DB::ping_and_store($dbh,'localhost');
-
+{
+ alarm(20);
+ my $time=time;
+ eval {
+   ping_periodically($dbh,'localhost',3,25);
+ };
+ is($@,'');
+ cmp_ok(time-$time,'>',15);
+ alarm(0);
+}
