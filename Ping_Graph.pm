@@ -47,7 +47,7 @@ sub graph_for_latest {
   @values=sort {$_->[0] cmp $_->[1]} @values;
   require GD::Graph;
   require GD::Graph::mixed;
-  my $width=300;
+  my $width=400;
   my $height=200;
   my $graph=GD::Graph::mixed->new($width,$height);
   $graph->set( 

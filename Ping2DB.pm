@@ -2,6 +2,7 @@ package Ping2DB;
 use 5.006;
 use strict;
 use warnings;
+
 use DBI;
 use Time::Piece;
 use Net::Ping;
