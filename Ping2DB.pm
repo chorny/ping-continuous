@@ -47,7 +47,7 @@ sub ping_and_store {
   WHERE dt=?";
   my $n=$dbh->do($sql,{},$dt) || die('DB error '. $dbh->errstr());;
   if ($n==0) {
-    $sql="INSERT pings_by_period (dt,$field) VALUES (?,1)";
+    $sql="INSERT INTO pings_by_period (dt,$field) VALUES (?,1)";
     $dbh->do($sql,{},$dt) || die('DB error '. $dbh->errstr()."\nsql: $sql");;
   }
 }
