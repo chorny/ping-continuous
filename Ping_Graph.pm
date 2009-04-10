@@ -6,6 +6,7 @@ use Time::Piece;
 use GD::Graph;
 use Exporter 'import';
 our @EXPORT=our @EXPORT_OK=qw/graph_for_latest/;
+our $VERSION=0.01;
 
 sub max_dt {
   my $dbh=shift;
@@ -35,10 +36,10 @@ sub graph_for_latest {
   $max_dt-=60*$period_minutes;
   my $max_dt_str=$max_dt->ymd.' '.$max_dt->hour.':'.$max_dt->min;
 
-  my $sql="SELECT * FROM pings_by_period WHERE dt>$max_dt_str";
+  my $sql="SELECT * FROM pings_by_period WHERE dt>?";
   my $sth=$dbh->prepare($sql);
 
-  $sth->execute() || err($dbh->errstr());
+  $sth->execute($max_dt_str) || err($dbh->errstr());
   my @values;
   while (my $ref = $sth->fetchrow_hashref()) {
     my $dt=$ref->{'dt'};
@@ -46,7 +47,7 @@ sub graph_for_latest {
     push @{$values[0]},$dt;
     push @{$values[1]},$fail || 0;
   }
-  @values=sort {$_->[0] cmp $_->[1]} @values;
+  @values=sort {$a->[0] cmp $b->[0]} @values;
   require GD::Graph;
   require GD::Graph::mixed;
   my $width=400;

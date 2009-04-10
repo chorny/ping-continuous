@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Ping_Graph;
 use CGI qw/header/;
+use DBI;
 
 my $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
   || die('Connect error: '.$DBI::errstr);
