@@ -20,4 +20,9 @@ EOT
   return $dbh;
 }
 
+sub current_date_hour {
+  my $t = gmtime;
+  return $t->ymd.' '.$t->hour.':'.$t->min;
+}
+
 1;
