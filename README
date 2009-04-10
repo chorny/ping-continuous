@@ -1,7 +1,8 @@
-ping-continuous is a Perl modules/apps bundle.
-It's purpose is to collect and display information about host availability.
-Ping2DB.pm is a module to continuously ping a host and store result in DB
-ping_graph.cgi is an utility to draw a graph based on collected data
-
+ping-continuous's purpose is to collect and display information about host availability.
 This is alpha version, please check program for correctness.
 It will be refactored heavily when I will have time.
+
+It's a Perl modules/apps bundle.
+Ping2DB.pm is a module to continuously ping a host and store result in DB
+ping_graph.cgi is an utility to draw a graph based on collected data
+collect.pl - utlity to collect data
