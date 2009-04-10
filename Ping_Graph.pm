@@ -1,9 +1,11 @@
-package Ping2DB;
+package Ping_Graph;
 use 5.006;
 use strict;
 use warnings;
 use Time::Piece;
 use GD::Graph;
+use Exporter 'import';
+our @EXPORT=our @EXPORT_OK=qw/graph_for_latest/;
 
 sub max_dt {
   my $dbh=shift;
