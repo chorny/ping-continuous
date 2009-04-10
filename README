@@ -1,0 +1,6 @@
+ping-continuous is a Perl modules/apps bundle.
+Ping2DB.pm is a module to continuously ping a host and store result in DB
+ping_graph.cgi is an utility to draw a graph based on collected data
+
+This is alpha version, please check program for correctness.
+It will be refactored heavily when I will have time.
