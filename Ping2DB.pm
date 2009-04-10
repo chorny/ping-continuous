@@ -69,6 +69,7 @@ sub ping_periodically {
     if (time<$time+$period) {
       sleep($time+$period-time);
     }
+    return if $ping_periodically_exit;
   }
 }
 
