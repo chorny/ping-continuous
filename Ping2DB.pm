@@ -5,7 +5,7 @@ use warnings;
 use DBI;
 use Time::Piece;
 use Exporter 'import';
-our @EXPORT=our @EXPORT_OK=qw/create_sqlite_db/;
+our @EXPORT=our @EXPORT_OK=qw/create_sqlite_db current_date_hour/;
 
 sub create_sqlite_db {
   my $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
@@ -22,7 +22,7 @@ EOT
 
 sub current_date_hour {
   my $t = gmtime;
-  return $t->ymd.' '.$t->hour.':'.$t->min;
+  return $t->ymd.' '.$t->hour;
 }
 
 1;
