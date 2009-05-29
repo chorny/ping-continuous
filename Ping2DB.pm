@@ -71,7 +71,7 @@ sub ping_and_store {
   my $host=shift;
   my $dt=current_date_hour_10min();
   my $field;
-  if (test_ping($host)) {
+  if (test_http_ok($host)) {
     $field='pings_pass';
   } else {
     $field='pings_fail';
