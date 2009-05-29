@@ -9,11 +9,12 @@ use Net::Ping;
 use Time::Hires;
 use Exporter 'import';
 our @EXPORT=our @EXPORT_OK=qw/create_sqlite_db current_date_hour current_date_hour_10min
-ping_periodically/;
+ping_periodically open_or_create/;
 our $VERSION=0.01;
 
 sub create_sqlite_db {
-  my $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
+  my $db_name=shift || 'ping_db.sqlite';
+  my $dbh = DBI->connect("DBI:SQLite:$db_name",'','')
     || die('Connect error: '.$DBI::errstr);
   $dbh->do(<<'EOT') or die('DB error '. $dbh->errstr());
 CREATE TABLE pings_by_period (
@@ -25,23 +26,39 @@ EOT
   return $dbh;
 }
 
-sub current_date_hour {
+sub open_or_create {
+  my $db_name=shift || 'ping_db.sqlite';
+  my $dbh;
+  if (-e $db_name) {
+    $dbh = DBI->connect('DBI:SQLite:ping_db.sqlite','','')
+     || die('Connect error: '.$DBI::errstr);
+  } else {
+    $dbh = create_sqlite_db($db_name);
+  }
+}
+
+sub current_date_hour { #date + hour
   my $t = gmtime;
   return $t->ymd.' '.$t->hour;
 }
 
-sub current_date_hour_10min {
+sub current_date_hour_10min { # minutes rounded to multiplier of 10
   my $t = gmtime;
   return $t->ymd.' '.$t->hour.':'.sprintf("%02i",int($t->min/10)*10);
+}
+
+sub test_ping {
+  my $host=shift;
+  my $ping=Net::Ping->new('icmp');
+  return $ping->ping($host);
 }
 
 sub ping_and_store {
   my $dbh=shift;
   my $host=shift;
-  my $ping=Net::Ping->new();
   my $dt=current_date_hour_10min();
   my $field;
-  if ($ping->ping($host)) {
+  if (test_ping($host)) {
     $field='pings_pass';
   } else {
     $field='pings_fail';
