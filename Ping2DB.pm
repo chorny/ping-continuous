@@ -53,6 +53,19 @@ sub test_ping {
   return $ping->ping($host);
 }
 
+sub test_http_ok {
+  my $url=shift;
+  require LWP::UserAgent;
+  my $ua=LWP::UserAgent->new();
+  my $response=$ua->get($url);
+  if ($response->is_success) {
+    if ($response->content()=~/ok/) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 sub ping_and_store {
   my $dbh=shift;
   my $host=shift;
